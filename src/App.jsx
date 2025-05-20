@@ -7,6 +7,7 @@ import Categories from "./pages/Categories";
 import AddMovies from "./pages/AddMovies";
 import ShowTimeManagement from "./pages/ShowTimeManagement";
 import Login from "./pages/Login";
+import AuthLayout from "./components/layout/AuthLayout";
 
 const App = () => {
 
@@ -43,7 +44,11 @@ const App = () => {
     }
   ])
 
-  return <RouterProvider router={router} />
+  return (
+    <AuthLayout>
+      <RouterProvider router={router} />
+    </AuthLayout>
+  )
 }
 
 export default App;

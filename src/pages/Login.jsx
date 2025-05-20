@@ -1,11 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 
 import Button from "../components/ui/Button";
+
 import { AuthService } from "../services/Authentication";
 
 const Login = () => {
+
+    const navigate = useNavigate();
 
     const [toggle, setToggle] = useState(false);
     const [error, setError] = useState(false);
@@ -27,8 +31,8 @@ const Login = () => {
     const loginAdmin = async (values, actions) => {
         setError("");
         try {
-            const admin = await AuthService.login(values.email, values.password);
-            console.log(admin);
+            await AuthService.login(values.email, values.password);
+            navigate("/");
         } catch (error) {
             setError(error);
         } finally {
@@ -39,8 +43,8 @@ const Login = () => {
     return (
         <main className="min-h-[calc(100vh-8.8rem)] max-w-6xl mx-auto pt-8">
             <div className="max-w-md w-full mx-auto shadow sm:shadow-md md:rounded-2xl p-8">
-                <h1 class="text-2xl font-bold text-gray-900 mb-1">Admin Login</h1>
-                <p class="text-sm text-gray-600 mb-4">Enter your credentials to access the dashboard</p>
+                <h1 className="text-2xl font-bold text-gray-900 mb-1">Admin Login</h1>
+                <p className="text-sm text-gray-600 mb-4">Enter your credentials to access the dashboard</p>
                 <Formik
                     initialValues={{
                         email: "",
