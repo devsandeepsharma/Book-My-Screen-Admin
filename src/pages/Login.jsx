@@ -60,7 +60,7 @@ const Login = () => {
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-medium text-gray-900">Email</label>
                                 <Field 
-                                    className="w-full px-4 py-2 pt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" 
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" 
                                     name="email" 
                                     type="email" 
                                     placeholder="admin@gmail.com" 
@@ -74,7 +74,7 @@ const Login = () => {
                                 <label className="text-sm font-medium text-gray-900">Password</label>
                                 <div className="relative">
                                     <Field 
-                                        className="w-full px-4 py-2 pt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" 
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500" 
                                         name="password" 
                                         type={toggle ? "text": "password"} 
                                         placeholder="••••••••"
