@@ -1,6 +1,12 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Layout from "./components/layout/Layout";
+import Landing from "./pages/Landing";
+import Dashboard from "./pages/Dashboard";
+import Categories from "./pages/Categories";
+import AddMovies from "./pages/AddMovies";
+import ShowTimeManagement from "./pages/ShowTimeManagement";
+import Login from "./pages/Login";
 
 const App = () => {
 
@@ -11,44 +17,28 @@ const App = () => {
       children: [
         {
           path: "/",
-          element: <h1>Dashboard</h1>
+          element: <Dashboard />
         },
         {
           path: "/categories",
-          element: <h1>Categories</h1>
+          element: <Categories />
         },
         {
           path: "/add-movies",
-          element: <h1>Add Movies</h1>
+          element: <AddMovies />
         },
         {
           path: "/showtime",
-          element: <h1>Show time Managment</h1>
-        },
-        {
-          path: "/users",
-          element: <h1>Manage Users</h1>
-        },
-        {
-          path: "/admins",
-          element: <h1>Manage Admins</h1>
+          element: <ShowTimeManagement />
         },
         {
           path: "/landing",
-          element: <h1>Landing Page</h1>
+          element: <Landing />
         },
         {
           path: "/login",
-          element: <h1>Login Page</h1>
-        },
-        {
-          path: "/register",
-          element: <h1>Register Admin</h1>
-        },
-        {
-          path: "/forgot-password",
-          element: <h1>Forgot Password</h1>
-        },
+          element: <Login />
+        }
       ]
     }
   ])
