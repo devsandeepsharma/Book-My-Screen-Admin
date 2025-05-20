@@ -8,6 +8,8 @@ import AddMovies from "./pages/AddMovies";
 import ShowTimeManagement from "./pages/ShowTimeManagement";
 import Login from "./pages/Login";
 import AuthLayout from "./components/layout/AuthLayout";
+import ProtectedRoute from "./components/layout/ProtectedRoute";
+import PublicRoute from "./components/layout/PublicRoute";
 
 const App = () => {
 
@@ -18,27 +20,51 @@ const App = () => {
       children: [
         {
           path: "/",
-          element: <Dashboard />
+          element: (
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          )
         },
         {
           path: "/categories",
-          element: <Categories />
+          element: (
+            <ProtectedRoute>
+              <Categories />
+            </ProtectedRoute>
+          )
         },
         {
           path: "/add-movies",
-          element: <AddMovies />
+          element: (
+            <ProtectedRoute>
+              <AddMovies />
+            </ProtectedRoute>
+          )
         },
         {
           path: "/showtime",
-          element: <ShowTimeManagement />
+          element: (
+            <ProtectedRoute>
+              <ShowTimeManagement />
+            </ProtectedRoute>
+          )
         },
         {
           path: "/landing",
-          element: <Landing />
+          element: (
+            <PublicRoute>
+              <Landing />
+            </PublicRoute>
+          )
         },
         {
           path: "/login",
-          element: <Login />
+          element: (
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          )
         }
       ]
     }
