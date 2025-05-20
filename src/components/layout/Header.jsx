@@ -8,7 +8,7 @@ const Header = () => {
         <header className="w-full">
             <div className="h-1 bg-teal-600"></div>
             <div className="px-6 py-4 bg-white border-b border-gray-200">
-                <div className=" flex items-center justify-between">
+                <div className="max-w-6xl mx-auto flex items-center justify-between">
                     <Link 
                         to="/landing" 
                         className="focus:outline-1 focus:outline-offset-4 focus:outline-dashed focus:outline-teal-600 rounded transition"
