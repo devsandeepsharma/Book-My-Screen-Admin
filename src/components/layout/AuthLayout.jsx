@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { AuthService } from "../../services/Authentication";
-import { AdminService } from "../../services/Admin";
+import { CategoryService } from "../../services/Admin";
 import { authActions } from "../../store/authSlice";
 import { categoriesActions } from "../../store/categoriesSlice";
 
@@ -15,7 +15,7 @@ const AuthLayout = ({ children }) => {
     const fetchAdminData = async () => {
         try {
             const [categories] = await Promise.all([
-                AdminService.fetchCategories()
+                CategoryService.fetchAll()
             ]);
             console.log(categories);
             dispatch(categoriesActions.setCategories(categories));

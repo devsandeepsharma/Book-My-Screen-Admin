@@ -3,23 +3,21 @@ import { getDatabase, ref, push, get, update, remove } from "firebase/database";
 import { app } from "./config";
 
 class Admin {
-    constructor() {
+    constructor(path) {
         this.db = getDatabase(app);
+        this.path = path;
     }
 
-    createCategory (category) {
-        const dbRef = ref(this.db, "categories");
-
-        return push(dbRef, {category, createdAt: Date.now() });
+    create(data) {
+        const dbRef = ref(this.db, this.path);
+        return push(dbRef, { ...data, createdAt: Date.now() });
     }
 
-    fetchCategories () {
-        const dbRef = ref(this.db, 'categories');
-
+    fetchAll() {
+        const dbRef = ref(this.db, this.path);
         return get(dbRef).then(snapshot => {
             const data = snapshot.val();
             if (!data) return [];
-
             return Object.entries(data).map(([id, value]) => ({
                 id,
                 ...value
@@ -27,17 +25,16 @@ class Admin {
         });
     }
 
-    updateCategory(id, updatedCategory) {
-        const dbRef = ref(this.db, `categories/${id}`);
-
-        return update(dbRef, { category: updatedCategory });
+    update(id, updatedData) {
+        const dbRef = ref(this.db, `${this.path}/${id}`);
+        return update(dbRef, updatedData);
     }
 
-    deleteCategory(id) {
-        const dbRef = ref(this.db, `categories/${id}`);
-
+    delete(id) {
+        const dbRef = ref(this.db, `${this.path}/${id}`);
         return remove(dbRef);
     }
 }
 
-export const AdminService = new Admin();
+export const CategoryService = new Admin("categories");
+export const MovieService = new Admin("movies");

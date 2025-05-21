@@ -8,7 +8,7 @@ import Button from "../ui/Button";
 
 import { uiActions } from "../../store/uiSlice";
 import { categoriesActions } from "../../store/categoriesSlice";
-import { AdminService } from "../../services/Admin";
+import { CategoryService } from "../../services/Admin";
 
 const AddCategory = ({ editCategory }) => {
     
@@ -30,7 +30,7 @@ const AddCategory = ({ editCategory }) => {
         setError("");
         try {
             if (editCategory) {
-                await AdminService.updateCategory(editCategory.id, values.category);
+                await CategoryService.update(editCategory.id, { category: values.category });
 
                 dispatch(categoriesActions.updateCategory({ 
                     id: editCategory.id,
@@ -39,7 +39,7 @@ const AddCategory = ({ editCategory }) => {
                     }
                 }));
             } else {
-                const category = await AdminService.createCategory(values.category);
+                const category = await CategoryService.create({ category: values.category });
 
                 const categoryData = {
                     id: category.key, 

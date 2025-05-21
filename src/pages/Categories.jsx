@@ -6,7 +6,7 @@ import AddCategory from "../components/forms/AddCategory";
 
 import { uiActions } from "../store/uiSlice";
 import { categoriesActions } from "../store/categoriesSlice";
-import { AdminService } from "../services/Admin";
+import { CategoryService } from "../services/Admin";
 
 const Categories = () => {
 
@@ -29,7 +29,7 @@ const Categories = () => {
 
     const handleDeleteCategory = async (id) => {
         try {
-            await AdminService.deleteCategory(id);
+            await CategoryService.delete(id);
             dispatch(categoriesActions.removeCategory(id));
         } catch (error) {
             console.log(error);
