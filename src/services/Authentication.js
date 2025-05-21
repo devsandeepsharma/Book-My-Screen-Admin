@@ -6,7 +6,7 @@ class Authentication {
 
     login(email, password) {
         return new Promise((resolve, reject) => {
-            if (email === "admin@gmail.com" && password === "123567") {
+            if (email === import.meta.env.VITE_ADMIN_EMAIL && password === import.meta.env.VITE_ADMIN_PASSWORD) {
                 this.user = { name: "admin", email };
                 localStorage.setItem("token", JSON.stringify(this.user));
                 this.notifyListeners();
