@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { AuthService } from "../../services/Authentication";
-import { CategoryService } from "../../services/Admin";
+import { CategoryService, MovieService } from "../../services/Admin";
 import { authActions } from "../../store/authSlice";
 import { categoriesActions } from "../../store/categoriesSlice";
+import { moviesActions } from "../../store/moviesSlice";
 
 const AuthLayout = ({ children }) => {
 
@@ -14,11 +15,14 @@ const AuthLayout = ({ children }) => {
 
     const fetchAdminData = async () => {
         try {
-            const [categories] = await Promise.all([
-                CategoryService.fetchAll()
+            const [categories, movies] = await Promise.all([
+                CategoryService.fetchAll(),
+                MovieService.fetchAll(),
             ]);
             console.log(categories);
+            console.log(movies);
             dispatch(categoriesActions.setCategories(categories));
+            dispatch(moviesActions.setMovies(movies));
         } catch (error) {
             console.log("Error while fetching admin data:", error);
         } finally {

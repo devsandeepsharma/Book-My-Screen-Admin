@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import Modal from "../ui/Modal";
 import Button from "../ui/Button";
 import { uiActions } from "../../store/uiSlice";
+import { MovieService } from "../../services/Admin";
+import { moviesActions } from "../../store/moviesSlice";
 
 const Movies = ({ editMovie }) => {
 
@@ -54,8 +56,34 @@ const Movies = ({ editMovie }) => {
 
     const handleSubmit = async (values, actions) => {
         setError("");
-        console.log(values);
-        // handle your Firebase or API logic here
+        try {
+            if (editMovie) {
+                await MovieService.update(editMovie.id, { ...values });
+
+                dispatch(moviesActions.updateMovie({ 
+                    id: editMovie.id,
+                    updatedData: {
+                        ...values
+                    }
+                }));
+            } else {
+                const movie = await MovieService.create({ ...values });
+
+                const movieData = {
+                    id: movie.key, 
+                    ...values,
+                    createdAt: Date.now(),
+                };
+
+                dispatch(moviesActions.addMovie(movieData));
+            }
+            
+            dispatch(uiActions.closeModal());
+        } catch (error) {
+            setError("Failed to add movies. Please try again."); 
+        } finally {
+            actions.setSubmitting(false);
+        }
     };
 
     return (
@@ -94,6 +122,7 @@ const Movies = ({ editMovie }) => {
                                     />
                                     <p className="text-xs font-medium text-red-600">
                                         <ErrorMessage name="name" />
+                                        {error && error}
                                     </p>
                                 </div>
                                 <div className="flex flex-col gap-2">
@@ -106,6 +135,7 @@ const Movies = ({ editMovie }) => {
                                     />
                                     <p className="text-xs font-medium text-red-600">
                                         <ErrorMessage name="poster" />
+                                        {error && error}
                                     </p>
                                 </div>
                             </div>
@@ -120,6 +150,7 @@ const Movies = ({ editMovie }) => {
                                     />
                                     <p className="text-xs font-medium text-red-600">
                                         <ErrorMessage name="heroImageUrl" />
+                                        {error && error}
                                     </p>
                                  </div>
                                 <div className="flex flex-col gap-2">
@@ -132,6 +163,7 @@ const Movies = ({ editMovie }) => {
                                     />
                                     <p className="text-xs font-medium text-red-600">
                                         <ErrorMessage name="director" />
+                                        {error && error}
                                     </p>
                                 </div>
                             </div>
@@ -152,6 +184,7 @@ const Movies = ({ editMovie }) => {
                                     </Field>
                                     <p className="text-xs font-medium text-red-600">
                                         <ErrorMessage name="category" />
+                                        {error && error}
                                     </p>
                                 </div>
                                 <div className="w-full flex flex-col gap-2">
@@ -163,6 +196,7 @@ const Movies = ({ editMovie }) => {
                                     />
                                     <p className="text-xs font-medium text-red-600">
                                         <ErrorMessage name="releaseDate" />
+                                        {error && error}
                                     </p>
                                 </div>
                             </div>
@@ -177,6 +211,7 @@ const Movies = ({ editMovie }) => {
                                     />
                                     <p className="text-xs font-medium text-red-600">
                                         <ErrorMessage name="language" />
+                                        {error && error}
                                     </p>
                                 </div>
                                 <div className="flex flex-col gap-2">
@@ -190,6 +225,7 @@ const Movies = ({ editMovie }) => {
                                     />
                                     <p className="text-xs font-medium text-red-600">
                                         <ErrorMessage name="imdbRating" />
+                                        {error && error}
                                     </p>
                                 </div>
                             </div>
@@ -203,6 +239,7 @@ const Movies = ({ editMovie }) => {
                                 />
                                 <p className="text-xs font-medium text-red-600">
                                     <ErrorMessage name="trailer" />
+                                    {error && error}
                                 </p>
                             </div>
                             <div className="flex flex-col gap-2">
@@ -215,7 +252,8 @@ const Movies = ({ editMovie }) => {
                                     className="resize-none w-full px-4 py-2 border border-gray-300 rounded-md outline-0 border-2 focus:border-teal-500"
                                 />
                                 <p className="text-xs font-medium text-red-600">
-                                <   ErrorMessage name="description" />
+                                    <ErrorMessage name="description" />
+                                    {error && error}
                                 </p>
                             </div>
                         </div>
