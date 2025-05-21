@@ -103,7 +103,7 @@ const Sidebar = () => {
                     </div>
                 </div>
             </header>
-            <aside className="hidden md:flex md:flex-col w-64 bg-white shadow-lg border-r-4 border-teal-600 z-50 p-6 flex flex-col gap-4">
+            <aside className="hidden fixed min-h-screen md:flex md:flex-col w-64 bg-white shadow-lg border-r-4 border-teal-600 z-50 p-6 flex flex-col gap-4">
                 <Link 
                     to="/" 
                     className="focus:outline-1 focus:outline-offset-4 focus:outline-dashed focus:outline-teal-600 rounded transition"
@@ -111,7 +111,7 @@ const Sidebar = () => {
                     <Logo />
                 </Link>
                 <ul
-                    className="flex flex-col gap-4 h-full pt-5"
+                    className="flex min-h-[calc(100vh-8rem)] flex-col gap-4 h-full pt-5"
                 >
                     {
                         navLinks.map(({ path, label }) => (

@@ -14,7 +14,7 @@ const Layout = () => {
             {isLoggedIn ? (
                 <div className="flex flex-col md:flex-row min-h-screen">
                     <Sidebar />
-                    <main className="w-full">
+                    <main className="md:w-[calc(100%-256px)] md:ml-auto">
                         <Outlet />
                     </main>
                 </div>
