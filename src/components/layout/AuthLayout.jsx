@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
+import Skeleton from "../ui/Skeleton";
+
 import { AuthService } from "../../services/Authentication";
 import { CategoryService, MovieService } from "../../services/Admin";
 import { authActions } from "../../store/authSlice";
@@ -46,7 +48,7 @@ const AuthLayout = ({ children }) => {
         return () => unsubscribe();
     }, []);
 
-    if(loading) return <h1>Loading</h1>;
+    if(loading) return <Skeleton />;
 
     return children;
 }
