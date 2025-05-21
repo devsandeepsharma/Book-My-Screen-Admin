@@ -7,8 +7,10 @@ import Modal from "../ui/Modal";
 import Button from "../ui/Button";
 
 import { uiActions } from "../../store/uiSlice";
+import { categoriesActions } from "../../store/categoriesSlice";
+import { AdminService } from "../../services/Admin";
 
-const AddCategory = () => {
+const AddCategory = ({ editCategory }) => {
     
     const dispatch = useDispatch();
 
@@ -24,20 +26,50 @@ const AddCategory = () => {
         dispatch(uiActions.closeModal());
     }
     
-    const addCategory = async (values, actions) => {
+    const handleSubmit = async (values, actions) => {
+        setError("");
+        try {
+            if (editCategory) {
+                await AdminService.updateCategory(editCategory.id, values.category);
 
+                dispatch(categoriesActions.updateCategory({ 
+                    id: editCategory.id,
+                    updatedData: {
+                        category: values.category
+                    }
+                }));
+            } else {
+                const category = await AdminService.createCategory(values.category);
+
+                const categoryData = {
+                    id: category.key, 
+                    category: values.category,
+                    createdAt: Date.now(),
+                };
+
+                dispatch(categoriesActions.addCategory(categoryData));
+            }
+            
+            dispatch(uiActions.closeModal());
+        } catch (error) {
+            setError("Failed to add category. Please try again."); 
+        } finally {
+            actions.setSubmitting(false);
+        }
     }
 
     return (
         <Modal>
-            <h1 className="text-2xl font-bold text-gray-900 mb-1">Add Category</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-1">
+                {editCategory ? "Edit Category" : "Add Category"}
+            </h1>
             <Formik
                 initialValues={{
-                    category: ""
+                    category: editCategory?.category || ""
                 }}
                 validationSchema={categorySchema}
                 onSubmit={(values, actions) => {
-                    addCategory(values, actions);
+                    handleSubmit(values, actions);
                 }}
             >
                 {({ isSubmitting }) => (
@@ -58,7 +90,13 @@ const AddCategory = () => {
                         <div className="flex gap-3 ml-auto">
                             <Button type="button" variant="outline" onClick={closeModal}>Close</Button>
                             <Button type="submit" disabled={isSubmitting}>
-                                {isSubmitting ? "Adding...": "Add Category"}
+                                {
+                                    isSubmitting ? (
+                                        editCategory ? "Saving..." : "Adding..."
+                                    ) : (
+                                        editCategory ? "Save Changes" : "Add Category"
+                                    )
+                                }
                             </Button>
                         </div>
                     </Form>
