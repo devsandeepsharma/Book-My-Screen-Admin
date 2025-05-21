@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 
@@ -7,28 +7,63 @@ import Modal from "../ui/Modal";
 import Button from "../ui/Button";
 
 import { uiActions } from "../../store/uiSlice";
+import { moviesActions } from "../../store/moviesSlice";
+import { MovieService } from "../../services/Admin";
 
-const showTimeSchema = Yup.object({
-    date: Yup.string()
-        .required("Date is required")
-        .matches(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
-    time: Yup.string()
-        .required("Time is required")
-        .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, "Time must be in HH:mm format"),
-});
-
-const AddShowtime = ({ onSubmit }) => {
+const AddShowtime = ({ movie="" }) => {
 
     const dispatch = useDispatch();
 
+    const { movies } = useSelector((state) => state.movies);
+
     const [error, setError] = useState("");
+
+    const showTimeSchema = Yup.object({
+        date: Yup.string()
+            .required("Date is required")
+            .matches(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
+        time: Yup.string()
+            .required("Time is required")
+            .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, "Time must be in HH:mm format"),
+    });
 
     const closeModal = () => {
         dispatch(uiActions.closeModal());
     };
 
     const handleSubmit = async (values, actions) => {
-        setError("");
+        try {
+            const currentMovie = movies.find((m) => m.id === movie.id);
+            if (!currentMovie) throw new Error("Movie not found");
+
+            const updatedShowtime = JSON.parse(JSON.stringify(currentMovie.showtime || {}));
+
+            if (!updatedShowtime[values.date]) {
+                updatedShowtime[values.date] = {};
+            } else {
+                const timesOnDate = Object.values(updatedShowtime[values.date]);
+                if (timesOnDate.includes(values.time)) {
+                    setError("Showtime already booked at this time on selected date.");
+                    return;
+                }
+            }
+
+            const timeKey = Date.now().toString();
+            updatedShowtime[values.date][timeKey] = values.time;
+
+            await MovieService.update(movie.id, { showtime: updatedShowtime });
+
+            dispatch(moviesActions.updateMovie({ 
+                id: movie.id, 
+                updatedData: { showtime: updatedShowtime } 
+            }));
+
+            dispatch(uiActions.closeModal());
+        } catch (error) {
+            console.error("Failed to add showtime");
+        } finally {
+            actions.setSubmitting(false);
+        }
     };
 
     return (

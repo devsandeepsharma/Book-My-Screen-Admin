@@ -1,4 +1,4 @@
-import { getDatabase, ref, push, get, update, remove } from "firebase/database";
+import { getDatabase, ref, push, set, get, update, remove } from "firebase/database";
 
 import { app } from "./config";
 
@@ -28,6 +28,11 @@ class Admin {
     update(id, updatedData) {
         const dbRef = ref(this.db, `${this.path}/${id}`);
         return update(dbRef, updatedData);
+    }
+
+    updateNested(path, updatedData) {
+        const dbRef = ref(this.db, path);
+        return set(dbRef, updatedData);
     }
 
     delete(id) {
