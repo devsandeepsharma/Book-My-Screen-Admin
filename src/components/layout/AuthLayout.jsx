@@ -4,10 +4,11 @@ import { useDispatch } from "react-redux";
 import Skeleton from "../ui/Skeleton";
 
 import { AuthService } from "../../services/Authentication";
-import { CategoryService, MovieService } from "../../services/Admin";
+import { BookingService, CategoryService, MovieService } from "../../services/Admin";
 import { authActions } from "../../store/authSlice";
 import { categoriesActions } from "../../store/categoriesSlice";
 import { moviesActions } from "../../store/moviesSlice";
+import { bookingActions } from "../../store/bookingSlice";
 
 const AuthLayout = ({ children }) => {
 
@@ -17,12 +18,15 @@ const AuthLayout = ({ children }) => {
 
     const fetchAdminData = async () => {
         try {
-            const [categories, movies] = await Promise.all([
+            const [categories, movies, bookings] = await Promise.all([
                 CategoryService.fetchAll(),
                 MovieService.fetchAll(),
+                BookingService.fetchAll()
             ]);
             console.log(categories);
             console.log(movies);
+            console.log(bookings);
+            dispatch(bookingActions.setBookings(bookings));
             dispatch(categoriesActions.setCategories(categories));
             dispatch(moviesActions.setMovies(movies));
         } catch (error) {

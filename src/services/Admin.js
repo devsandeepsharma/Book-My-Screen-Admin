@@ -43,3 +43,4 @@ class Admin {
 
 export const CategoryService = new Admin("categories");
 export const MovieService = new Admin("movies");
+export const BookingService = new Admin("tickets");
