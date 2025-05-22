@@ -5,9 +5,11 @@ import * as Yup from "yup";
 
 import Modal from "../ui/Modal";
 import Button from "../ui/Button";
+
 import { uiActions } from "../../store/uiSlice";
 import { MovieService } from "../../services/Admin";
 import { moviesActions } from "../../store/moviesSlice";
+import { formatDate } from "../../utils/dateUtils";
 
 const Movies = ({ editMovie }) => {
 
@@ -21,10 +23,8 @@ const Movies = ({ editMovie }) => {
         name: Yup.string()
             .required("Movie name is required"),
         poster: Yup.string()
-            .url("Poster must be a valid URL")
             .required("Poster image is required"),
         heroImageUrl: Yup.string()
-            .url("Hero section image must be a valid URL")
             .required("Hero section image is required"),
         description: Yup.string()
             .min(10, "Description should be at least 10 characters")
@@ -59,19 +59,21 @@ const Movies = ({ editMovie }) => {
         try {
             if (editMovie) {
                 await MovieService.update(editMovie.id, { ...values });
-
+                const releaseDate = formatDate(values.releaseDate);
                 dispatch(moviesActions.updateMovie({ 
                     id: editMovie.id,
                     updatedData: {
-                        ...values
+                        ...values,
+                        releaseDate: releaseDate,
                     }
                 }));
             } else {
                 const movie = await MovieService.create({ ...values });
-
+                const releaseDate = formatDate(values.releaseDate);
                 const movieData = {
                     id: movie.key, 
                     ...values,
+                    releaseDate: releaseDate,
                     createdAt: Date.now(),
                 };
 
@@ -129,7 +131,7 @@ const Movies = ({ editMovie }) => {
                                     <label className="text-sm font-medium text-gray-900">Poster URL</label>
                                     <Field
                                         name="poster"
-                                        type="url"
+                                        type="text"
                                         placeholder="Enter poster image URL"
                                         className="w-full px-4 py-2 border border-gray-300 rounded-md outline-0 border-2 focus:border-teal-500"
                                     />
@@ -144,7 +146,7 @@ const Movies = ({ editMovie }) => {
                                     <label className="text-sm font-medium text-gray-900">Hero Section Image URL</label>
                                     <Field
                                         name="heroImageUrl"
-                                        type="url"
+                                        type="text"
                                         placeholder="Enter hero section image URL"
                                         className="w-full px-4 py-2 border border-gray-300 rounded-md outline-0 border-2 focus:border-teal-500"
                                     />
