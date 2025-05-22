@@ -9,6 +9,7 @@ import Button from "../ui/Button";
 import { uiActions } from "../../store/uiSlice";
 import { moviesActions } from "../../store/moviesSlice";
 import { MovieService } from "../../services/Admin";
+import { formatDate, formatTime } from "../../utils/dateUtils";
 
 const AddShowtime = ({ movie="" }) => {
 
@@ -36,20 +37,23 @@ const AddShowtime = ({ movie="" }) => {
             const currentMovie = movies.find((m) => m.id === movie.id);
             if (!currentMovie) throw new Error("Movie not found");
 
+            const formattedDate = formatDate(values.date);
+            const formattedTime = formatTime(values.time);
+
             const updatedShowtime = JSON.parse(JSON.stringify(currentMovie.showtime || {}));
 
-            if (!updatedShowtime[values.date]) {
-                updatedShowtime[values.date] = {};
+            if (!updatedShowtime[formattedDate]) {
+                updatedShowtime[formattedDate] = {};
             } else {
-                const timesOnDate = Object.values(updatedShowtime[values.date]);
-                if (timesOnDate.includes(values.time)) {
+                const timesOnDate = Object.values(updatedShowtime[formattedDate]);
+                if (timesOnDate.includes(formattedTime)) {
                     setError("Showtime already booked at this time on selected date.");
                     return;
                 }
             }
 
             const timeKey = Date.now().toString();
-            updatedShowtime[values.date][timeKey] = values.time;
+            updatedShowtime[formattedDate][timeKey] = formattedTime;
 
             await MovieService.update(movie.id, { showtime: updatedShowtime });
 
@@ -60,11 +64,12 @@ const AddShowtime = ({ movie="" }) => {
 
             dispatch(uiActions.closeModal());
         } catch (error) {
+            console.log(error)
             console.error("Failed to add showtime");
         } finally {
             actions.setSubmitting(false);
         }
-    };
+    };    
 
     return (
         <Modal>
