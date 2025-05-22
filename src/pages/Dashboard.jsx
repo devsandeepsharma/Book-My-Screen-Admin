@@ -15,14 +15,18 @@ const Dashboard = () => {
 
             <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 px-6 py-2 md:py-6">
                 {
-                    bookings.map((ticket, index) => (
-                        <li key={index} className="bg-white border border-gray-100 rounded-lg p-4 shadow flex flex-col gap-2">
-                            <h3 className="text-lg font-semibold text-gray-900">Movie: {ticket?.movieName}</h3>
-                            <p className="text-sm text-gray-600">User: {ticket?.name}</p>
-                            <p className="text-sm text-gray-600">Email: {ticket?.email}</p>
-                            <p className="text-sm text-gray-600">Showtime: {ticket?.date} at {ticket?.time}</p>
-                        </li>
-                    ))
+                    bookings?.length > 0 ? (
+                        bookings.map((ticket, index) => (
+                            <li key={index} className="bg-white border border-gray-100 rounded-lg p-4 shadow flex flex-col gap-2">
+                                <h3 className="text-lg font-semibold text-gray-900">Movie: {ticket?.movieName}</h3>
+                                <p className="text-sm text-gray-600">User: {ticket?.name}</p>
+                                <p className="text-sm text-gray-600">Email: {ticket?.email}</p>
+                                <p className="text-sm text-gray-600">Showtime: {ticket?.date} at {ticket?.time}</p>
+                            </li>
+                        ))
+                    ) : (
+                        <p className="text-center text-gray-500 mt-6 col-span-full">No tickets booked yet.</p>
+                    )
                 }
             </ul>
         </section>

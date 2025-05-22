@@ -68,7 +68,7 @@ const AddMovies = () => {
             <ul className="grid md:grid-cols-2 gap-4 px-6 py-2 md:py-6">
                 {
                     (!filteredMovies || filteredMovies.length === 0) ? (
-                        <p className="text-center text-gray-500 mt-6 col-span-full">No movies added yet.</p>
+                        <p className="text-center text-gray-500 mt-6 col-span-full">No movies added with this category yet.</p>
                     ) : (
                         filteredMovies.map(movie => (
                             <li
