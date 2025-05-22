@@ -10,7 +10,11 @@ const Sidebar = () => {
 
     const [isOpen, setIsOpen] = useState(false);
 
-    const toggle = () => setIsOpen(prev => !prev);
+    const toggle = () => {
+        if (window.innerWidth < 768) {
+            setIsOpen(prev => !prev);
+        }
+    };
 
     useEffect(() => {
         document.body.style.overflow = isOpen ? "hidden" : "";
